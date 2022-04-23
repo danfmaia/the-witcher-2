@@ -2,7 +2,7 @@
 /** Witcher Script file
 /***********************************************************************/
 /** Exports for CWitcherGame
-/** Copyright © 2009
+/** Copyright ï¿½ 2009
 /***********************************************************************/
 
 import class CAIParams extends CObject
@@ -201,7 +201,9 @@ import class CWitcherGame extends CGame
 	
 	// Game started (world is already loaded)
 	event OnGameStarted()
-	{	
+	{
+		var value : float;
+
 		theHud.OnGameStarted();
 		theGame.ResetTutorialData();
 		if( thePlayer.GetCurrentMapId() == 1234 )
@@ -212,16 +214,14 @@ import class CWitcherGame extends CGame
 		{
 			theHud.MapLoad( thePlayer.GetCurrentMapId() );
 		}
-				
-		theGame.ReadConfigParamFloat( "User", "Gameplay", "CameraFOV", cameraFovValue );
-		theGame.ReadConfigParamFloat( "User", "Gameplay", "CameraLeftRight", cameraLeftRightValue );
-		theGame.ReadConfigParamFloat( "User", "Gameplay", "CameraInOut", cameraInOutValue );
-		theGame.ReadConfigParamFloat( "User", "Gameplay", "CameraUpDown", cameraUpDowmValue );
-
-		theCamera.SetFov( cameraFovValue );
-		theCamera.SetBehaviorVariable('camera_axis_X', cameraLeftRightValue);
-		theCamera.SetBehaviorVariable('cameraFurther', cameraInOutValue);
-		theCamera.SetBehaviorVariable('camera_axis_Z', cameraUpDowmValue);
+		if ( theGame.ReadConfigParamFloat( "User", "Gameplay", "CameraFOV", value ) )
+			theCamera.SetFov( value );
+		if ( theGame.ReadConfigParamFloat( "User", "Gameplay", "CameraLeftRight", value ) )
+			theCamera.SetBehaviorVariable('camera_axis_X', value);
+		if ( theGame.ReadConfigParamFloat( "User", "Gameplay", "CameraInOut", value ) )
+			theCamera.SetBehaviorVariable('cameraFurther', value);
+		if ( theGame.ReadConfigParamFloat( "User", "Gameplay", "CameraUpDown", value ) )
+			theCamera.SetBehaviorVariable('camera_axis_Z', value);
 	}
 	
 	// Game ended
@@ -239,12 +239,7 @@ import class CWitcherGame extends CGame
 	{
 		if ( key == 'GI_H' && IsKeyPressed( value ) )
 		{
-			theHud.SetGuiVisibility( ! theHud.IsGuiVisible() );
-				
-			theCamera.SetFov( cameraFovValue );
-			theCamera.SetBehaviorVariable('camera_axis_X', cameraLeftRightValue);
-			theCamera.SetBehaviorVariable('cameraFurther', cameraInOutValue);
-			theCamera.SetBehaviorVariable('camera_axis_Z', cameraUpDowmValue);
+			theHud.SetGuiVisibility( !theHud.IsGuiVisible() );
 		}
 		else if ( key == 'GI_Camera_Left' && IsKeyPressed( value ) )
 		{
@@ -783,3 +778,4 @@ import function SendArenaScoreToSteamLeaderboards( score : int, wave : int );
 //////////////////////////////////////////////////////////////////////////////////////////
 // ExperiencedGeralt Functions End
 //////////////////////////////////////////////////////////////////////////////////////////
+

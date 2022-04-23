@@ -3,7 +3,7 @@
 /** Witcher Script file
 /***********************************************************************/
 /** Object classes exprots
-/** Copyright © 2009 Dexio's Late Night R&D Home Center
+/** Copyright ï¿½ 2009 Dexio's Late Night R&D Home Center
 /***********************************************************************/
 
 struct SEnemySelection
@@ -1459,7 +1459,6 @@ import class CPlayer extends CActor
 			return true;
 		}
 	}
-		
 /////////////////////////////////////////////////////////////////////////////////////////
 // ExperiencedGeralt Camera Timers
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -7593,7 +7592,7 @@ thePlayer.RemoveAllBuffs();
 				if ( !FactsDoesExist('import_item_dyaebl') )
 				{
 					FactsAdd( 'import_item_dyaebl', 1 );
-					Log( "Importing equipped item: D’yaebl " );
+					Log( "Importing equipped item: Dï¿½yaebl " );
 					thePlayer.GetInventory().AddItem(StringToName("Dyaebl"), 1);
 				}
 			}
@@ -7602,7 +7601,7 @@ thePlayer.RemoveAllBuffs();
 				if ( !FactsDoesExist('import_item_ardaenye') )
 				{
 					FactsAdd( 'import_item_ardaenye', 1 );
-					Log( "Importing equipped item: Ard’aenye " );
+					Log( "Importing equipped item: Ardï¿½aenye " );
 					thePlayer.GetInventory().AddItem(StringToName("Ardaenye"), 1);
 				}
 			}
