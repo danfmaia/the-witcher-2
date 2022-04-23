@@ -29,9 +29,17 @@ import class CWitcherGame extends CGame
 	var targetingAreas : array< W2TargetingArea >;
 	var isPlayerOnArena : bool;
 	var arenaManager : CArenaManager;
+	var cameraFovValue : float;
+	var cameraInOutValue : float;
+	var cameraLeftRightValue : float;
+	var cameraUpDowmValue : float;
 
 	default aiInfoDisplayMode 							= 'all';
-
+	default cameraFovValue = 70.0;
+	default cameraInOutValue = 1.0;
+	default cameraLeftRightValue = 0.0;
+	default cameraUpDowmValue = 5.0;
+	
 	function SetDragon( drag : CDragon )
 	{
 		dragon = drag;
@@ -204,6 +212,16 @@ import class CWitcherGame extends CGame
 		{
 			theHud.MapLoad( thePlayer.GetCurrentMapId() );
 		}
+				
+		theGame.ReadConfigParamFloat( "User", "Gameplay", "CameraFOV", cameraFovValue );
+		theGame.ReadConfigParamFloat( "User", "Gameplay", "CameraLeftRight", cameraLeftRightValue );
+		theGame.ReadConfigParamFloat( "User", "Gameplay", "CameraInOut", cameraInOutValue );
+		theGame.ReadConfigParamFloat( "User", "Gameplay", "CameraUpDown", cameraUpDowmValue );
+
+		theCamera.SetFov( cameraFovValue );
+		theCamera.SetBehaviorVariable('camera_axis_X', cameraLeftRightValue);
+		theCamera.SetBehaviorVariable('cameraFurther', cameraInOutValue);
+		theCamera.SetBehaviorVariable('camera_axis_Z', cameraUpDowmValue);
 	}
 	
 	// Game ended
@@ -222,6 +240,67 @@ import class CWitcherGame extends CGame
 		if ( key == 'GI_H' && IsKeyPressed( value ) )
 		{
 			theHud.SetGuiVisibility( ! theHud.IsGuiVisible() );
+				
+			theCamera.SetFov( cameraFovValue );
+			theCamera.SetBehaviorVariable('camera_axis_X', cameraLeftRightValue);
+			theCamera.SetBehaviorVariable('cameraFurther', cameraInOutValue);
+			theCamera.SetBehaviorVariable('camera_axis_Z', cameraUpDowmValue);
+		}
+		else if ( key == 'GI_Camera_Left' && IsKeyPressed( value ) )
+		{
+			ExperiencedGeralt_Camera_Left();
+			thePlayer.AddTimer('ExperiencedGeralt_Timer_Camera_Left', 0.150, true, false);
+		}
+		else if ( key == 'GI_Camera_Right' && IsKeyPressed( value ) )
+		{
+			ExperiencedGeralt_Camera_Right();
+			thePlayer.AddTimer('ExperiencedGeralt_Timer_Camera_Right', 0.150, true, false);
+		}
+		else if ( key == 'GI_Camera_Up' && IsKeyPressed( value ) )
+		{
+			ExperiencedGeralt_Camera_Up();
+			thePlayer.AddTimer('ExperiencedGeralt_Timer_Camera_Up', 0.150, true, false);
+		}
+		else if ( key == 'GI_Camera_Down' && IsKeyPressed( value ) )
+		{
+			ExperiencedGeralt_Camera_Down();
+			thePlayer.AddTimer('ExperiencedGeralt_Timer_Camera_Down', 0.150, true, false);
+		}
+		else if ( key == 'GI_Camera_In' && IsKeyPressed( value ) )
+		{
+			ExperiencedGeralt_Camera_In();
+			thePlayer.AddTimer('ExperiencedGeralt_Timer_Camera_In', 0.150, true, false);
+		}
+		else if ( key == 'GI_Camera_Out' && IsKeyPressed( value ) )
+		{
+			ExperiencedGeralt_Camera_Out();
+			thePlayer.AddTimer('ExperiencedGeralt_Timer_Camera_Out', 0.150, true, false);
+		}
+		else if ( key == 'GI_Camera_Reset' && IsKeyPressed( value ) )
+		{
+			ExperiencedGeralt_Camera_Reset();
+		}
+		else if ( key == 'GI_Camera_ReverseSide' && IsKeyPressed( value ) )
+		{
+			ExperiencedGeralt_Camera_ReverseSide();
+		}
+		else if ( key == 'GI_Camera_FOV_Decrease' && IsKeyPressed( value ) )
+		{
+			ExperiencedGeralt_Camera_FOV_Decrease();
+			thePlayer.AddTimer('ExperiencedGeralt_Timer_Camera_FOV_Decrease', 0.150, true, false);
+		}
+		else if ( key == 'GI_Camera_FOV_Increase' && IsKeyPressed( value ) )
+		{
+			ExperiencedGeralt_Camera_FOV_Increase();
+			thePlayer.AddTimer('ExperiencedGeralt_Timer_Camera_FOV_Increase', 0.150, true, false);
+		}
+		else if ( key == 'GI_Camera_FOV_Reset' && IsKeyPressed( value ) )
+		{
+			ExperiencedGeralt_Camera_FOV_Reset();
+		}
+		else if ( key == 'GI_Camera_FirstPersonTemplate' && IsKeyPressed( value ) )
+		{
+			ExperiencedGeralt_Camera_FirstPersonTemplate();
 		}
 		
 		return false;
@@ -437,3 +516,270 @@ import class CWitcherGame extends CGame
 // Use 'theGame' global variable
 //import function GetGame() : CWitcherGame;
 import function SendArenaScoreToSteamLeaderboards( score : int, wave : int );
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// ExperiencedGeralt Functions Begin
+//////////////////////////////////////////////////////////////////////////////////////////
+
+	function ExperiencedGeralt_Camera_Left()
+	{
+		var CameraPosition : Float;
+
+		if ( theGame.IsBlackscreen()
+		  || theGame.IsCurrentlyPlayingNonGameplayScene()
+		  || !theHud.CanShowMainMenu() )
+			return;
+
+		CameraPosition = theCamera.GetBehaviorVariable('camera_axis_X');
+		if ( theGame.GetGameInputValue('GI_WalkSwitch') > 0.5f ) // Walking(Hold) Key
+			CameraPosition += 0.20;
+		else if ( theGame.GetGameInputValue('GI_ADIST_Medium') > 0.5f ) // Medium Distance Key
+			CameraPosition = 0.35;
+		else
+			CameraPosition += 0.05;
+		theCamera.SetBehaviorVariable('camera_axis_X', CameraPosition);
+	}
+	function ExperiencedGeralt_Camera_Right()
+	{
+		var CameraPosition : Float;
+
+		if ( theGame.IsBlackscreen()
+		  || theGame.IsCurrentlyPlayingNonGameplayScene()
+		  || !theHud.CanShowMainMenu() )
+			return;
+
+		CameraPosition = theCamera.GetBehaviorVariable('camera_axis_X');
+		if ( theGame.GetGameInputValue('GI_WalkSwitch') > 0.5f ) // Walking(Hold) Key
+			CameraPosition -= 0.20;
+		else if ( theGame.GetGameInputValue('GI_ADIST_Medium') > 0.5f ) // Medium Distance Key
+			CameraPosition = -0.35;
+		else
+			CameraPosition -= 0.05;
+		theCamera.SetBehaviorVariable('camera_axis_X', CameraPosition);
+	}
+	function ExperiencedGeralt_Camera_Up()
+	{
+		var CameraPosition : Float;
+
+		if ( theGame.IsBlackscreen()
+		  || theGame.IsCurrentlyPlayingNonGameplayScene()
+		  || !theHud.CanShowMainMenu() )
+			return;
+
+		CameraPosition = theCamera.GetBehaviorVariable('camera_axis_Z');
+		CameraPosition -= 0.05;
+		theCamera.SetBehaviorVariable('camera_axis_Z', CameraPosition);
+	}
+	function ExperiencedGeralt_Camera_Down()
+	{
+		var CameraPosition : Float;
+
+		if ( theGame.IsBlackscreen()
+		  || theGame.IsCurrentlyPlayingNonGameplayScene()
+		  || !theHud.CanShowMainMenu() )
+			return;
+
+		CameraPosition = theCamera.GetBehaviorVariable('camera_axis_Z');
+		CameraPosition += 0.05;
+		theCamera.SetBehaviorVariable('camera_axis_Z', CameraPosition);
+	}
+	function ExperiencedGeralt_Camera_In()
+	{
+		var CameraPosition : Float;
+
+		if ( theGame.IsBlackscreen()
+		  || theGame.IsCurrentlyPlayingNonGameplayScene()
+		  || !theHud.CanShowMainMenu() )
+			return;
+
+		CameraPosition = theCamera.GetBehaviorVariable('cameraFurther');
+		if ( theGame.GetGameInputValue('GI_WalkSwitch') > 0.5f ) // Walking(Hold) Key
+			CameraPosition -= 0.05;
+		else if ( theGame.GetGameInputValue('GI_ADIST_Medium') > 0.5f ) // Medium Distance Key
+			CameraPosition = 0.00;
+		else
+			CameraPosition -= 0.20;
+		theCamera.SetBehaviorVariable('cameraFurther', CameraPosition);
+	}
+	function ExperiencedGeralt_Camera_Out()
+	{
+		var CameraPosition : Float;
+
+		if ( theGame.IsBlackscreen()
+		  || theGame.IsCurrentlyPlayingNonGameplayScene()
+		  || !theHud.CanShowMainMenu() )
+			return;
+
+		CameraPosition = theCamera.GetBehaviorVariable('cameraFurther');
+		if ( theGame.GetGameInputValue('GI_WalkSwitch') > 0.5f ) // Walking(Hold) Key
+			CameraPosition += 0.05;
+		else if ( theGame.GetGameInputValue('GI_ADIST_Medium') > 0.5f ) // Medium Distance Key
+			CameraPosition = 3.00;
+		else
+			CameraPosition += 0.20;
+		theCamera.SetBehaviorVariable('cameraFurther', CameraPosition);
+	}
+	function ExperiencedGeralt_Camera_Reset()
+	{
+		var CameraPosition : Float;
+		var value : float;
+
+		if ( theGame.IsBlackscreen()
+		  || theGame.IsCurrentlyPlayingNonGameplayScene()
+		  || !theHud.CanShowMainMenu() )
+			return;
+
+		if ( theGame.GetGameInputValue('GI_WalkSwitch') > 0.5f ) // Walking(Hold) Key
+		{
+			CameraPosition = 0.0;
+			theCamera.SetBehaviorVariable('cameraFurther', CameraPosition);
+			theCamera.SetBehaviorVariable('camera_axis_X', CameraPosition);
+			theCamera.SetBehaviorVariable('camera_axis_Z', CameraPosition);
+		}
+		else if ( theGame.GetGameInputValue('GI_ADIST_Medium') > 0.5f ) // Medium Distance Key
+		{
+			value = theCamera.GetFov();
+			theGame.WriteConfigParamFloat( "User", "Gameplay", "CameraFOV", value );
+
+			value = theCamera.GetBehaviorVariable('camera_axis_X');
+			theGame.WriteConfigParamFloat( "User", "Gameplay", "CameraLeftRight", value );
+
+			value = theCamera.GetBehaviorVariable('cameraFurther');
+			theGame.WriteConfigParamFloat( "User", "Gameplay", "CameraInOut", value );
+
+			value = theCamera.GetBehaviorVariable('camera_axis_Z');
+			theGame.WriteConfigParamFloat( "User", "Gameplay", "CameraUpDown", value );
+
+			theHud.m_messages.ShowInformationText("General Camera options have been saved to the Ini");
+		}
+		else
+		{
+			if ( theGame.ReadConfigParamFloat( "User", "Gameplay", "CameraFOV", value ) )
+				theCamera.SetFov( value );
+
+			if ( theGame.ReadConfigParamFloat( "User", "Gameplay", "CameraLeftRight", value ) )
+				theCamera.SetBehaviorVariable('camera_axis_X', value);
+			else
+				theCamera.SetBehaviorVariable('camera_axis_X', CameraPosition);
+
+			if ( theGame.ReadConfigParamFloat( "User", "Gameplay", "CameraInOut", value ) )
+				theCamera.SetBehaviorVariable('cameraFurther', value);
+			else
+				theCamera.SetBehaviorVariable('cameraFurther', CameraPosition);
+
+			if ( theGame.ReadConfigParamFloat( "User", "Gameplay", "CameraUpDown", value ) )
+				theCamera.SetBehaviorVariable('camera_axis_Z', value);
+			else
+				theCamera.SetBehaviorVariable('camera_axis_Z', CameraPosition);
+		}
+	}
+	function ExperiencedGeralt_Camera_ReverseSide()
+	{
+		var CameraPosition : Float;
+
+		if ( theGame.IsBlackscreen()
+		  || theGame.IsCurrentlyPlayingNonGameplayScene()
+		  || !theHud.CanShowMainMenu() )
+			return;
+
+		CameraPosition = theCamera.GetBehaviorVariable('camera_axis_X');
+		CameraPosition *= -1.0;
+		theCamera.SetBehaviorVariable('camera_axis_X', CameraPosition);
+	}
+	function ExperiencedGeralt_Camera_FOV_Decrease()
+	{
+		var CameraFOV : Float;
+
+		if ( theGame.IsBlackscreen()
+		  || theGame.IsCurrentlyPlayingNonGameplayScene()
+		  || !theHud.CanShowMainMenu() )
+			return;
+
+		CameraFOV = theCamera.GetFov();
+		CameraFOV -= 1.0;
+		theCamera.SetFov( CameraFOV );
+	}
+	function ExperiencedGeralt_Camera_FOV_Increase()
+	{
+		var CameraFOV : Float;
+
+		if ( theGame.IsBlackscreen()
+		  || theGame.IsCurrentlyPlayingNonGameplayScene()
+		  || !theHud.CanShowMainMenu() )
+			return;
+
+		CameraFOV = theCamera.GetFov();
+		CameraFOV += 1.0;
+		theCamera.SetFov( CameraFOV );
+	}
+	function ExperiencedGeralt_Camera_FOV_Reset()
+	{
+		var CameraFOV : Float;
+
+		if ( theGame.IsBlackscreen()
+		  || theGame.IsCurrentlyPlayingNonGameplayScene()
+		  || !theHud.CanShowMainMenu() )
+			return;
+
+		CameraFOV = 53.0;
+		theCamera.SetFov( CameraFOV );
+	}
+	function ExperiencedGeralt_Camera_FirstPersonTemplate()
+	{
+		var CameraFOV : Float;
+		var X,Y,Z : Float;
+		var value : float;
+
+		if ( theGame.IsBlackscreen()
+		  || theGame.IsCurrentlyPlayingNonGameplayScene()
+		  || !theHud.CanShowMainMenu() )
+			return;
+
+		X = 0.1;
+		Y = -3.0;
+		Z = -0.1;
+		CameraFOV = 70.0;
+
+		if ( theGame.GetGameInputValue('GI_ADIST_Medium') > 0.5f ) // Medium Distance Key
+		{
+			value = theCamera.GetFov();
+			theGame.WriteConfigParamFloat( "User", "Gameplay", "FirstPerson_CameraFOV", value );
+
+			value = theCamera.GetBehaviorVariable('camera_axis_X');
+			theGame.WriteConfigParamFloat( "User", "Gameplay", "FirstPerson_CameraLeftRight", value );
+
+			value = theCamera.GetBehaviorVariable('cameraFurther');
+			theGame.WriteConfigParamFloat( "User", "Gameplay", "FirstPerson_CameraInOut", value );
+
+			value = theCamera.GetBehaviorVariable('camera_axis_Z');
+			theGame.WriteConfigParamFloat( "User", "Gameplay", "FirstPerson_CameraUpDown", value );
+
+			theHud.m_messages.ShowInformationText("First Person Camera options have been saved to the Ini");
+		}
+		else
+		{
+			if ( theGame.ReadConfigParamFloat( "User", "Gameplay", "FirstPerson_CameraFOV", value ) )
+				theCamera.SetFov( value );
+			else
+				theCamera.SetFov( CameraFOV );
+
+			if ( theGame.ReadConfigParamFloat( "User", "Gameplay", "FirstPerson_CameraLeftRight", value ) )
+				theCamera.SetBehaviorVariable('camera_axis_X', value);
+			else
+				theCamera.SetBehaviorVariable('camera_axis_X', X);
+
+			if ( theGame.ReadConfigParamFloat( "User", "Gameplay", "FirstPerson_CameraInOut", value ) )
+				theCamera.SetBehaviorVariable('cameraFurther', value);
+			else
+				theCamera.SetBehaviorVariable('cameraFurther', Y);
+
+			if ( theGame.ReadConfigParamFloat( "User", "Gameplay", "FirstPerson_CameraUpDown", value ) )
+				theCamera.SetBehaviorVariable('camera_axis_Z', value);
+			else
+				theCamera.SetBehaviorVariable('camera_axis_Z', Z);
+		}
+	}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// ExperiencedGeralt Functions End
+//////////////////////////////////////////////////////////////////////////////////////////

@@ -40,13 +40,23 @@ state Exploration in CPlayer extends ExtendedMovable
 		hitEventNames_t3.PushBack('Hit_t3b');
 		
 		thePlayer.SetIsInShadow( false );
-				
+		
+		if( bFastMove )
+		{
+			parent.SetAnimationTimeMultiplier(fFastMoveSpeed);
+		}
+		else
+		{
+			parent.SetAnimationTimeMultiplier(1.0f);
+		}
 	}
 	
 	event OnLeaveState()
 	{
-		super.OnLeaveState();
+		super.OnLeaveState();	
 		parent.RemoveTimer('FindEnemy');
+		
+		parent.SetAnimationTimeMultiplier(1.0f);
 	} 
 	
 	function SetFindEnemyTimer()

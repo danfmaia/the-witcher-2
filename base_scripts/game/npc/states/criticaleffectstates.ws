@@ -52,7 +52,7 @@ state Knockdown in CNewNPC extends Base
 		{
 			parent.AddTimer('KeepCombatTimer', 1.0, true);
 		}
-		super.OnEnterState();
+		super.OnEnterState();		
 		virtual_parent.SetBehaviorVariable( "CriticalState", (int)CST_Knockdown );
 	}
 	function SetWasInCombat(flag : bool)
@@ -94,9 +94,21 @@ state Knockdown in CNewNPC extends Base
 		}
 		if(virtual_parent.IsKnockedDown() && !hitParams.groupAttack && virtual_parent.CanBeFinishedOff(hitParams.attacker))
 		{
-			//thePlayer.HideNearbyEnemies(30.0, 3.0, virtual_parent);				
+			//thePlayer.HideNearbyEnemies(30.0, 3.0, virtual_parent);	
+			
 			theGame.GetCSTakedown().OnCSTakedown_1ManDown( virtual_parent );
-			return false;
+			
+			// damage knocked down enemy normally as long as it is alive
+			// # block knockdown knock down knocked knockeddown blocking hit absorb state
+			if(virtual_parent.IsAlive())
+			{
+				hitParams.outDamageMultiplier = hitParams.outDamageMultiplier + 2;
+				return true;
+			}
+			else		
+			{
+				return false;
+			}
 		}
 		else if(virtual_parent.IsKnockedDown() && !hitParams.groupAttack )
 		{
@@ -128,6 +140,7 @@ state Knockdown in CNewNPC extends Base
 	{	
 		var res : bool;
 		parent.SetKnockedDown(true);
+		parent.SetBlockingHit(false);
 		SetWasInCombat(combat);
 		SetGoalId( goalId );
 		//parent.CantBlockCooldown();
@@ -249,6 +262,7 @@ state Unbalance in CNewNPC extends Base
 		
 		SetGoalId( goalId );
 		
+		
 		parent.SetBlockingHit( true, 30.0 );
 		parent.ActionCancelAll();
 		res = parent.RaiseForceEvent('Unbalance');
@@ -310,7 +324,7 @@ state Stun in CNewNPC extends Base
 		{
 			parent.AddTimer('KeepCombatTimer', 1.0, true);
 		}
-		super.OnEnterState();
+		super.OnEnterState();		
 		virtual_parent.SetBehaviorVariable( "CriticalState", (int)CST_Knockdown );
 	}
 	function SetWasInCombat(flag : bool)
@@ -346,10 +360,20 @@ state Stun in CNewNPC extends Base
 		if(hitParams.attacker != thePlayer)
 			return true;
 		if(!hitParams.groupAttack && virtual_parent.CanBeFinishedOff(hitParams.attacker))
-		{
+		{ 
 			//thePlayer.HideNearbyEnemies(30.0, 3.0, virtual_parent);				
 			theGame.GetCSTakedown().OnCSTakedown_1Man( virtual_parent, false );
-			return false;
+			
+			// damage stunned enemy normally as long as it is alive
+			// # block stun blocking hit absorb state stunned
+			if(virtual_parent.IsAlive())
+			{
+				return virtual_parent.OnBeingHit( hitParams );
+			}
+			else		
+			{
+				return false;
+			}
 		}
 		else
 		{
@@ -390,7 +414,7 @@ state Stun in CNewNPC extends Base
 
 		//theHud.m_hud.ShowTutorial("tut02", "tut02_333x166", true); // <-- tutorial content is present in external tutorial - disabled
 		//theHud.ShowTutorialPanelOld( "tut02", "tut02_333x166" );
-		
+			
 		if(wasInCombat)
 		{
 			HitEvent(BCH_Stun);

@@ -60,7 +60,8 @@ state Cutscene in CPlayer extends Base
 		{
 			wasDarkEffectSteel = false;
 			thePlayer.SetDarkWeaponSteel( true );
-		}	
+		}
+		
 	}
 	
 	event OnLeavingState()

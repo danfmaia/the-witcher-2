@@ -27,6 +27,7 @@ state Prisoner in CPlayer extends Movable
 		parent.AddTimer( 'ProcessMovement', 0.001, true, false, TICK_PrePhysics );
 		
 		parent.SetManualControl( parent.isMovable, true );
+		
 	}
 	
 	event OnLeaveState()
