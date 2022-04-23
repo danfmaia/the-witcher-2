@@ -2,10 +2,6 @@
 // 		  CONTAINER CLASS        //
 ///////////////////////////////////
 
-// returns the maximum load (max weight that player can carry)
-import function GetMaxWeight() : float;
-// returns the current player load (the sum of all carried items weights)
-import function GetCurrentWeight() : float;
 
 class CContainer extends CGameplayEntity
 {
@@ -33,50 +29,23 @@ class CContainer extends CGameplayEntity
 	
 	//default wasUsed = false;
 	
-	var sourceInv	: CInventoryComponent;
-	var targetInv	: CInventoryComponent;
-
-	var arrayData 	: array < CFlashValueScript >;
-	
-	var itemId		: SItemUniqueId;
-	var allItems	: array< SItemUniqueId >;
-	
-	var i			: int;
-	
 	// Entity was dynamically spawned
 	event OnSpawned( spawnData : SEntitySpawnData ) 
 	{
 		this.GetInventory().UpdateLoot();
 		if ( IsLootable() )
 		{
-			if ( isDynamic ) {
-				sourceInv = this.GetInventory();
-				targetInv = thePlayer.GetInventory();
-				
-				sourceInv.GetAllItems( allItems );
-				
-				for ( i = allItems.Size()-1; i >= 0; i-=1 )
-				{
-					itemId = allItems[i];
-					if ( sourceInv.GetItemAttributeAdditive( itemId, 'item_weight' ) == 0  && ! sourceInv.ItemHasTag(itemId, 'Quest') ) {
-						if ( AllowItemDarkDiff( sourceInv, itemId ) ) Helper_TransferItemFromContainerToPlayer( itemId, targetInv, sourceInv, isDynamic );	
-						theSound.PlaySound( "gui/hud/itemlooted" );
-					}
-				}
-			}
-		}
-		
-		if ( ! IsLootable() ) {
-			SetVisualsEmpty();
-			DestroyIt();
-			GetComponent("Loot").SetEnabled( false );
-			HideLootWindow();
-		} else {
 			SetVisualsFull();
 			
-			if (!isNotEnabledOnSpawn) {
+			if (!isNotEnabledOnSpawn)
+			{
 				GetComponent("Loot").SetEnabled( true );
 			}
+		}
+		else
+		{
+			SetVisualsEmpty();
+			GetComponent("Loot").SetEnabled( false );
 		}
 	}
 	
@@ -574,15 +543,9 @@ class CContainer extends CGameplayEntity
 		}
 	}
 	
-	
-	
-	// EMC - Detect without using medallion
 	function SetVisualsFull()
 	{
 		ApplyAppearance( "1_full" );
-		// to disable "Lootable objects always glow" feature comment line below and set isHighlightedByMedallion to true
-		// # highlight items item glow 
-		//PlayEffect('medalion_detection_fx');
 		PlayEffect( 'glow' );
 		QuestItemGlow();
 		isHighlightedByMedallion = true;

@@ -559,7 +559,7 @@ state Combat in W2FistfightManager
 						
 					InitializeQTE( true );
 					m_stage = SFT_WaitForHitQTE;
-					waitForHitTime = 2.0f;
+					waitForHitTime = 1.0f;
 					// fallthrough
 				}
 				
@@ -596,7 +596,7 @@ state Combat in W2FistfightManager
 						
 						// proceed to the next combo way
 						m_stage = SFT_WaitForEnemyCounter;
-						waitForHitTime = 2.0f;
+						waitForHitTime = 1.0f;
 							
 						// initialize a block QTE
 						InitializeQTE( m_hitter == thePlayer );
@@ -616,7 +616,7 @@ state Combat in W2FistfightManager
 						
 						// proceed to the next combo way
 						m_stage = SFT_WaitForWitcherCounter;
-						waitForHitTime = 2.0f;
+						waitForHitTime = 1.0f;
 							
 						// initialize a block QTE
 						InitializeQTE( m_hitter == thePlayer );	

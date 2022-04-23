@@ -10,10 +10,8 @@ state TraverseExploration in CPlayer extends Movable
 		
 		LogChannel( 'states', "TraverseExploration - OnEnterState" );
 		parent.SetManualControl( false, true );
-		
-		theGame.EnableButtonInteractions( false );	
 
-		thePlayer.SetAnimationTimeMultiplier(fTraverseSpeed);
+		theGame.EnableButtonInteractions( false );		
 	}
 	
 	event OnLeaveState()
@@ -22,15 +20,6 @@ state TraverseExploration in CPlayer extends Movable
 		parent.SetManualControl( true, true );
 		theGame.EnableButtonInteractions( true );
 		LogChannel( 'states', "TraverseExploration - OnLeaveState" );
-		
-		if( bFastMove )
-		{
-			parent.SetAnimationTimeMultiplier(fFastMoveSpeed);
-		}
-		else
-		{
-			parent.SetAnimationTimeMultiplier(1.0f);
-		}
 	}
 	
 	event OnGameInputEvent( key : name, value : float )

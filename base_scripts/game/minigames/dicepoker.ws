@@ -80,8 +80,6 @@ import class W2MinigameDicePoker extends CMinigame
 	
 	// Constants
 	var	m_minStake				: int;
-	var cheated					: bool;
-	default cheated = false;
 	
 	event OnStarted()
 	{
@@ -96,7 +94,6 @@ import class W2MinigameDicePoker extends CMinigame
 
 		// Init constants :)
 		m_minStake = 10;
-		cheated = false;
 
 		// Show panel
 		m_guiPanel = theHud.ShowDice( this );
@@ -865,7 +862,7 @@ import class W2MinigameDicePoker extends CMinigame
 			else if ( figure == MinigameDicePokerResult_Four )
 			{
 				figure = MinigameDicePokerResult_Poker;
-				if( playerIdx == DicePoker_Player && !cheated ) theGame.UnlockAchievement('ACH_POKER');
+				if( playerIdx == DicePoker_Player ) theGame.UnlockAchievement('ACH_POKER');
 			}
 			else
 			{
@@ -1021,14 +1018,8 @@ import class W2MinigameDicePoker extends CMinigame
 				(  position.X > m_tableBox.Max.X
 				|| position.Y > m_tableBox.Max.Y ) )
 			{
-				//dice.Disable();
-				//dice.Teleport( Vector( 0.0f, 0.0f, -1000.0f ) );
-				
-				// Restore original position
-				//dice.ResetPosition();
-				
-				cheated = true;
-				dice.ResetPositionCheat();
+				dice.Disable();
+				dice.Teleport( Vector( 0.0f, 0.0f, -1000.0f ) );
 			}
 			else
 			{

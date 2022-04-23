@@ -859,6 +859,11 @@ import class CGuiMainMenu extends CGuiPanel
 
 	private final function FillImportOrNew( AS_MenuItems : int )
 	{
+	var audioLang : string;
+	var textLang : string;
+	
+	theGame.GetGameLanguageName(audioLang, textLang);
+	
 		if( w1saves.Size() == 0 )
 		{
 			InsertMenuButton( AS_MenuItems, -999, StrUpperUTF( GetLocStringByKeyExt( "menuNoW1SavesFound" ) ), StrUpperUTF( GetLocStringByKeyExt( "menuNoW1SavesFound_t" ) ) );
@@ -873,7 +878,62 @@ import class CGuiMainMenu extends CGuiPanel
 		//dex++: user content menu
 		if ( GetNumUserPackagesWithLevels() > 0 )
 		{
-			InsertMenuButton( AS_MenuItems, MM_BTN_USER_CONTENT_MENU, "User Content", "Play user content packages" );
+			if (textLang == "EN")
+			{
+				InsertMenuButton( AS_MenuItems, MM_BTN_USER_CONTENT_MENU, "User Content", "Play user content packages" );
+			}
+			else if (textLang == "PL")
+			{
+				InsertMenuButton( AS_MenuItems, MM_BTN_USER_CONTENT_MENU, "User Content", " " );
+			}
+			else if (textLang == "DE")
+			{
+				InsertMenuButton( AS_MenuItems, MM_BTN_USER_CONTENT_MENU, "User Content", " " );
+			}
+			else if (textLang == "FR")
+			{
+				InsertMenuButton( AS_MenuItems, MM_BTN_USER_CONTENT_MENU, "User Content", " " );
+			}
+			else if (textLang == "ES")
+			{
+				InsertMenuButton( AS_MenuItems, MM_BTN_USER_CONTENT_MENU, "User Content", " " );
+			}
+			else if (textLang == "IT")
+			{
+				InsertMenuButton( AS_MenuItems, MM_BTN_USER_CONTENT_MENU, "User Content", " " );
+			}
+			else if (textLang == "CZ")
+			{
+				InsertMenuButton( AS_MenuItems, MM_BTN_USER_CONTENT_MENU, "User Content", " " );
+			}
+			else if (textLang == "HU")
+			{
+				InsertMenuButton( AS_MenuItems, MM_BTN_USER_CONTENT_MENU, "User Content", " " );
+			}
+			else if (textLang == "TR")
+			{
+				InsertMenuButton( AS_MenuItems, MM_BTN_USER_CONTENT_MENU, "User Content", " " );
+			}
+			else if (textLang == "BR")
+			{
+				InsertMenuButton( AS_MenuItems, MM_BTN_USER_CONTENT_MENU, "User Content", " " );
+			}
+			else if (textLang == "ZH")
+			{
+				InsertMenuButton( AS_MenuItems, MM_BTN_USER_CONTENT_MENU, "User Content", " " );
+			}
+			else if (textLang == "KR")
+			{
+				InsertMenuButton( AS_MenuItems, MM_BTN_USER_CONTENT_MENU, "User Content", " " );
+			}
+			else if (textLang == "JP")
+			{
+				InsertMenuButton( AS_MenuItems, MM_BTN_USER_CONTENT_MENU, "User Content", " " );
+			}
+			else if (textLang == "RU")
+			{
+				InsertMenuButton( AS_MenuItems, MM_BTN_USER_CONTENT_MENU, "User Content", " " );
+			}
 		}
 		//dex--
 		

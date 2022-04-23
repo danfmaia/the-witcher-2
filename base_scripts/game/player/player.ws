@@ -1035,26 +1035,6 @@ import class CPlayer extends CActor
 		
 	}
 	
-	function DarkSetEffect() {
-		if( darkWeaponSilver || darkWeaponSteel ) {
-			if( !IsDarkSet() && !thePlayer.IsDarkEffect() &&  !thePlayer.IsNotGeralt()) {
-				//theCamera.PlayEffect('dark_difficulty');
-				//SetDarkEffect( true );
-				SetDarkWeaponAddVitality( false );
-			} else {
-				//theCamera.StopEffect('dark_difficulty');
-				//SetDarkEffect( false );
-				SetDarkWeaponAddVitality( true );
-			}
-		}
-		else
-		{
-			//theCamera.StopEffect('dark_difficulty');
-			//SetDarkEffect( false );
-			SetDarkWeaponAddVitality( false );
-		}
-	}
-	
 	function IsDarkEffect() : bool             		 { return darkEffect; }
 	function SetDarkEffect( val : bool )       		 
 	{ 
@@ -1071,10 +1051,52 @@ import class CPlayer extends CActor
 	function SetDarkWeaponSilver( val : bool ) 		 
 	{ 
 		darkWeaponSilver = val; 
+		if(val)
+		{
+			//First we should turn off all effects
+			//SetDarkEffect( false );
+			//SetDarkWeaponAddVitality( false );
+			theCamera.StopEffect('dark_difficulty');
+			
+			SetDarkWeaponAddVitality( true );
+			if(!thePlayer.IsDarkEffect())
+			{
+				if ( !thePlayer.IsNotGeralt() ) theCamera.PlayEffect('dark_difficulty');
+				SetDarkEffect( true );
+			}
+		}
+		else
+		{
+			SetDarkEffect( false );
+			SetDarkWeaponAddVitality( false );
+			theCamera.StopEffect('dark_difficulty');
+		}
 	}
 	function SetDarkWeaponSteel( val : bool )  		 
 	{ 
 		darkWeaponSteel = val; 
+		if(val)
+		{
+			//First we should turn off all effects
+			//SetDarkEffect( false );
+			//SetDarkWeaponAddVitality( false );
+			
+			theCamera.StopEffect('dark_difficulty');
+			
+			SetDarkWeaponAddVitality( true );
+
+			if(!thePlayer.IsDarkEffect())
+			{
+				if ( !thePlayer.IsNotGeralt() ) theCamera.PlayEffect('dark_difficulty');
+				SetDarkEffect( true );
+			}
+		}
+		else
+		{
+			SetDarkEffect( false );
+			SetDarkWeaponAddVitality( false );
+			theCamera.StopEffect('dark_difficulty');
+		}
 	}
 	function SetDarkWeaponAddVitality( val : bool )  
 	{ 
@@ -1459,96 +1481,6 @@ import class CPlayer extends CActor
 			return true;
 		}
 	}
-		
-/////////////////////////////////////////////////////////////////////////////////////////
-// ExperiencedGeralt Camera Timers
-//////////////////////////////////////////////////////////////////////////////////////////
-
-	timer function ExperiencedGeralt_Timer_Camera_Left( timeDelta : float )
-	{
-		if ( theGame.GetGameInputValue('GI_Camera_Left') > 0.5f )
-		{
-			ExperiencedGeralt_Camera_Left();
-			thePlayer.AddTimer('ExperiencedGeralt_Timer_Camera_Left', 0.010, true, false);
-		}
-		else
-			thePlayer.RemoveTimer('ExperiencedGeralt_Timer_Camera_Left');
-	}
-	timer function ExperiencedGeralt_Timer_Camera_Right( timeDelta : float )
-	{
-		if ( theGame.GetGameInputValue('GI_Camera_Right') > 0.5f )
-		{
-			ExperiencedGeralt_Camera_Right();
-			thePlayer.AddTimer('ExperiencedGeralt_Timer_Camera_Right', 0.010, true, false);
-		}
-			else
-				thePlayer.RemoveTimer('ExperiencedGeralt_Timer_Camera_Right');
-	}
-	timer function ExperiencedGeralt_Timer_Camera_Up( timeDelta : float )
-	{
-		if ( theGame.GetGameInputValue('GI_Camera_Up') > 0.5f )
-		{
-			ExperiencedGeralt_Camera_Up();
-			thePlayer.AddTimer('ExperiencedGeralt_Timer_Camera_Up', 0.010, true, false);
-		}
-			else
-				thePlayer.RemoveTimer('ExperiencedGeralt_Timer_Camera_Up');
-	}
-	timer function ExperiencedGeralt_Timer_Camera_Down( timeDelta : float )
-	{
-		if ( theGame.GetGameInputValue('GI_Camera_Down') > 0.5f )
-		{
-			ExperiencedGeralt_Camera_Down();
-			thePlayer.AddTimer('ExperiencedGeralt_Timer_Camera_Down', 0.010, true, false);
-		}
-			else
-				thePlayer.RemoveTimer('ExperiencedGeralt_Timer_Camera_Down');
-	}
-	timer function ExperiencedGeralt_Timer_Camera_In( timeDelta : float )
-	{
-		if ( theGame.GetGameInputValue('GI_Camera_In') > 0.5f )
-		{
-			ExperiencedGeralt_Camera_In();
-			thePlayer.AddTimer('ExperiencedGeralt_Timer_Camera_In', 0.010, true, false);
-		}
-			else
-				thePlayer.RemoveTimer('ExperiencedGeralt_Timer_Camera_In');
-	}
-	timer function ExperiencedGeralt_Timer_Camera_Out( timeDelta : float )
-	{
-		if ( theGame.GetGameInputValue('GI_Camera_Out') > 0.5f )
-		{
-			ExperiencedGeralt_Camera_Out();
-			thePlayer.AddTimer('ExperiencedGeralt_Timer_Camera_Out', 0.010, true, false);
-		}
-			else
-				thePlayer.RemoveTimer('ExperiencedGeralt_Timer_Camera_Out');
-	}
-	timer function ExperiencedGeralt_Timer_Camera_FOV_Decrease( timeDelta : float )
-	{
-		if ( theGame.GetGameInputValue('GI_Camera_FOV_Decrease') > 0.5f )
-		{
-			ExperiencedGeralt_Camera_FOV_Decrease();
-			thePlayer.AddTimer('ExperiencedGeralt_Timer_Camera_FOV_Decrease', 0.010, true, false);
-		}
-			else
-				thePlayer.RemoveTimer('ExperiencedGeralt_Timer_Camera_FOV_Decrease');
-	}
-	timer function ExperiencedGeralt_Timer_Camera_FOV_Increase( timeDelta : float )
-	{
-		if ( theGame.GetGameInputValue('GI_Camera_FOV_Increase') > 0.5f )
-		{
-			ExperiencedGeralt_Camera_FOV_Increase();
-			thePlayer.AddTimer('ExperiencedGeralt_Timer_Camera_FOV_Increase', 0.010, true, false);
-		}
-			else
-				thePlayer.RemoveTimer('ExperiencedGeralt_Timer_Camera_FOV_Increase');
-	}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// ExperiencedGeralt Functions End
-//////////////////////////////////////////////////////////////////////////////////////////
-
 	function SetCombatBlockTriggerActive( val : bool, trigger : CBlockCombatArea )
 	{
 		combatBlockTriggerActive = val;
@@ -3304,7 +3236,7 @@ import class CPlayer extends CActor
 		lastSign = ST_LastSign;
 		soundMaterials = LoadCSV("globals/sound_materials.csv");
 		
-		SetEnemySelectionWeights(75.0, 20.0, 1.0, 1.25, 0.2, 0.0, 0.2, 0.0, 1.0, -1.0, 160, 0.1);
+		SetEnemySelectionWeights(75.0, 20.0, 1.0, 1.25, 0.2, 0.75, 0.2, 0.6, 1.0, -1.0, 160, 0.1);
 		SetCombatV2(true);
 		AllowCombatRotation(true);
 		super.OnSpawned( spawnData );		
@@ -3515,7 +3447,7 @@ import class CPlayer extends CActor
 	
 	function KeepCombatMode()
 	{
-		combatMode = 5;
+		combatMode = 7;
 		theGame.CreateNoSaveLock( 'PlayerInCombat', combatModeSaveLock );
 		
 		if ( thePlayer.AreCombatHotKeysBlocked() ) thePlayer.SetCombatHotKeysBlocked( false );
@@ -3595,7 +3527,6 @@ import class CPlayer extends CActor
 			SetDarkWeaponSilver(false);
 			SetDarkWeaponSteel(false);
 			SetDarkSet(false);		
-			DarkSetEffect();
 		}
 		else
 		{
@@ -3607,13 +3538,11 @@ import class CPlayer extends CActor
 					{
 						SetDarkWeaponSteel(true);
 						CheckSet(darkItem, thePlayer);
-						DarkSetEffect();
 					}
 					else if(GetInventory().ItemHasTag(darkItem, 'SilverSword'))
 					{
 						SetDarkWeaponSilver(true);
 						CheckSet(darkItem, thePlayer);
-						DarkSetEffect();
 					}
 				}
 			}
@@ -3622,7 +3551,6 @@ import class CPlayer extends CActor
 				SetDarkWeaponSilver(false);
 				SetDarkWeaponSteel(false);
 				SetDarkSet(false);
-				DarkSetEffect();
 			}
 		}
 		// --------------------------------------------------
@@ -4275,7 +4203,7 @@ mBoolean( true ) );
 			
 			m_canUseMedallion = false;
 			theHud.m_hud.SetIsMedallionActive( false );
-			AddTimer( 'OnEnableMedallion', 1.5f, false );
+			AddTimer( 'OnEnableMedallion', 10.f, false );
 			
 			FindPowerPlaces();
 			
@@ -7145,9 +7073,9 @@ thePlayer.RemoveAllBuffs();
 	{
 		var npc : CActor;
 		var currStateName : name;
-	
+		
 		npc = (CNewNPC)enemy;
-				
+		
 		if ( !npc ) return false;
 		
 		currStateName = npc.GetCurrentStateName();
@@ -7165,11 +7093,11 @@ thePlayer.RemoveAllBuffs();
 		var npc : CActor;
 		var currStateName : name;
 		var takedownParams : STakedownParams;
-
+		
 		npc = (CNewNPC)enemy;
 		
 		if ( !npc ) return false;
-				
+		
 		currStateName = npc.GetCurrentStateName();
 
 		if ( currStateName == 'Falter' )
@@ -7452,7 +7380,7 @@ thePlayer.RemoveAllBuffs();
 				itemName = StringToName("magic_s" + i + "_2" );
 				if ( thePlayer.GetCharacterStats().HasAbility(itemName) ) thePlayer.GetCharacterStats().RemoveAbility(itemName);
 			}
-		talents = (level - 1) * 1;
+		talents = level - 1;
 	}	
 	function AllowCombatRotation(flag : bool)
 	{

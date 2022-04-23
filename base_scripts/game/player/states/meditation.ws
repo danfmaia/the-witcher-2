@@ -58,8 +58,6 @@ state Meditation in CPlayer extends Base
 		theSound.PlaySound( "gui/waittime/started" );
 		
 		thePlayer.SetManualControl( false, false );
-		
-		parent.SetAnimationTimeMultiplier(2.0f);
 	}
 	
 	event OnLeaveState()
@@ -75,22 +73,20 @@ state Meditation in CPlayer extends Base
 		}
 		super.OnLeaveState();
 		
-		parent.SetAnimationTimeMultiplier(1.0f);
-		
 		// Play meditation stop sound
 		theSound.PlaySound( "gui/waittime/stopped" );
-				
+		
 		FactsAdd( 'facts_meditation', -1, -1 );
 		
 		theGame.ResetHoursPerMinute();
 		//theGame.SetDefaultAnimationTimeMultiplier( theGame.GetDefaultAnimationTimeMultiplier() / timeMultiplier );
-		theGame.SetTimeScale( theGame.GetTimeScale() / timeMultiplier );	
+		theGame.SetTimeScale( theGame.GetTimeScale() / timeMultiplier );
 		
 		theGame.EnableButtonInteractions( true );
 		
 		parent.SetHotKeysBlocked( false );
-				
-		thePlayer.SetAllPlayerStatesBlocked( false );	
+		
+		thePlayer.SetAllPlayerStatesBlocked( false );
 		
 		thePlayer.SetManualControl( true, true );
 	}

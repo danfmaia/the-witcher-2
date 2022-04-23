@@ -1034,7 +1034,8 @@ import class CHudInstance extends CFlashInstance
 		{
 			m_character = new CGuiCharacter in this;
 		}
-		if ( theGame.GetDifficultyLevel() < 5 || theGame.GetIsPlayerOnArena() ) {
+		if ( theGame.GetDifficultyLevel() < 2 || theGame.GetIsPlayerOnArena()) 
+		{
 			m_character.SetIsInteractive( true );
 		} else
 		{

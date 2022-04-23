@@ -62,7 +62,7 @@ state PlayerSelect in W2MinigameDicePoker
 
 		parent.SelectAllDices( DicePoker_Player, false );
 
-		parent.CameraTop();
+		parent.CameraCloseUp();
 
 		parent.StartPlayerSelection();
 	}
@@ -230,7 +230,7 @@ state PlayerThrowing in W2MinigameDicePoker
 {
 	entry function StatePlayerThrowing()
 	{
-		parent.CameraTop();
+		parent.CameraSide();
 		
 		if( theGame.IsUsingPad() )
 		{

@@ -59,6 +59,7 @@ state CombatSword in CPlayer extends Combat
 		riposteActor = NULL;
 		guardBlock = false;		
 		
+
 		thePlayer.SetIsInShadow( false );
 				
 		SetReflectedEvents();
