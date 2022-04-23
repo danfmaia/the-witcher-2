@@ -223,6 +223,17 @@ class CMinigameDice
 		// LogChannel( 'Minigame', "Dice " + m_rigidBodyIdx + ": " + result );
 	}
 	
+	final function ResetPositionCheat()
+	{
+		// Reset transform
+		m_physics.ResetTransform( m_rigidBodyIdx );
+			
+		// Set rotation according to result ( 6 )
+		m_physics.TeleportRigidBody( m_rigidBodyIdx, m_component.GetWorldPosition(), RotationForResult( 6 ) );
+		
+		// LogChannel( 'Minigame', "Dice " + m_rigidBodyIdx + ": " + result );
+	}
+	
 	final function EnablePhysics()
 	{
 		m_physics.SetBodyAsDynamic( m_rigidBodyIdx );

@@ -545,12 +545,25 @@ import class CActor extends CGameplayEntity
 		var playerState : EPlayerState;
 		playerState = thePlayer.GetCurrentPlayerState();
 		
-		if(this.IsImmortal() || this.IsInvulnerable())
+		if(this.IsImmortal() || this.IsInvulnerable() )
 		{
 			return false;
 		}
+		
+		//boss finish off - insta kill
+		if(this.IsBoss() && this.GetHealthPercentage() > 67.0f)
+		{
+			return false;
+		}
+		
+		if(!this.IsBoss() && this.GetHealthPercentage() > 95.0f)
+		{
+			return false;
+		}
+		
 		if(attacker == thePlayer && playerState != PS_CombatSteel && playerState != PS_CombatSilver)
 			return false;
+			
 		return canBeFinishedOff;
 	}
 	function CanAct() : bool

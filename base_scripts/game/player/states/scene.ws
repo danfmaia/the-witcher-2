@@ -55,6 +55,7 @@ import state Scene in CPlayer extends Base
 		
 		theGame.EnableButtonInteractions( true );
 		parent.immortalityModeScene = AIM_None;
+		
 		super.OnLeaveState();
 	}
 	

@@ -18,7 +18,14 @@ import state Movable in CPlayer extends Base
 	default				m_scheduledState				= PS_None;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+		
+	public var bFastMove : bool;
+	public var fFastMoveSpeed : float;
+	default fFastMoveSpeed = 1.3f;
+	public var fTraverseSpeed : float;
+	default fTraverseSpeed = 1.3f;
+	private var moveSpeedTime : EngineTime;		
+		
 	event OnEnterState()
 	{
 		// Pass to base class
@@ -28,7 +35,7 @@ import state Movable in CPlayer extends Base
 		parent.AddTimer( 'ProcessMovement', 0.001, true, false, TICK_PrePhysics );
 		
 		parent.SetManualControl( true, true );
-		
+			
 		// set the state change flags
 		m_scheduledState = PS_None;
 	}
@@ -43,7 +50,7 @@ import state Movable in CPlayer extends Base
 		
 		// Pass to base class
 		super.OnLeaveState();
-		
+			
 		if( parent.blockSpeedReset == false )
 		{
 			currRotation = parent.GetWorldRotation();
@@ -63,17 +70,51 @@ import state Movable in CPlayer extends Base
 		
 	event OnGameInputEvent( key : name, value : float )
 	{
-		if( key == 'GI_WalkFlag' && value > 0.5f )
+		if( key == 'GI_WalkSwitch' && parent.GetCurrentStateName() == 'Exploration' )
+		{
+			if( value > 0.5f )
+			{
+				moveSpeedTime = theGame.GetEngineTime() + 0.3;
+			}
+			else if( theGame.GetEngineTime() < moveSpeedTime )
+			{
+				bFastMove = !bFastMove;
+				if( bFastMove )
+				{
+					parent.SetAnimationTimeMultiplier(fFastMoveSpeed);
+				}
+				else
+				{
+					parent.SetAnimationTimeMultiplier(1.0f);
+				}
+				return true;
+			}
+		}																	   
+		else if( key == 'GI_WalkFlag' && value > 0.5f )
 		{
 			parent.SwitchWalkFlag();
 			return true;
 		}
+		else if( (key == 'GI_Block' || key == 'GI_Accept_Evade') && parent.GetCurrentStateName() == 'Exploration' && value > 0.5f )
+		{
+			bFastMove = !bFastMove;
+			if( bFastMove )
+			{
+				parent.SetAnimationTimeMultiplier(fFastMoveSpeed);
+			}
+			else
+			{
+				parent.SetAnimationTimeMultiplier(1.0f);
+			}
+			return true;
+		}		
+
 		else if ( ProcessCameraInputs( key, value ) || ProcessMovementInputs( key, value ) )
 		{
 			//return true if the input have been processed and we dont want to pass it further
 			return true;
 		}
-		
+					
 		// Not handled
 		return false;
 	}
@@ -261,7 +302,7 @@ import state Movable in CPlayer extends Base
 				}
 			}
 		}
-		theCamera.SetZoom(parent.cameraFurtherCurrent);
+		//theCamera.SetZoom(parent.cameraFurtherCurrent);
 
 		// send camera pos/rot data to hud (not at every frame)
 		if (theCamera.GetHudDataDelay() <= 0.0)
@@ -364,6 +405,8 @@ class CMoveTRGPlayerManualMovement extends CMoveTRGScript
 		{		
 			if ( speedVal > 0 )
 			{	
+				agent.SetBehaviorVariable( "rawSpeed", 1.0 );
+				
 				SetOrientationGoal( goal, thePlayer.rawPlayerHeading );
 				SetHeadingGoal( goal, VecFromHeading( thePlayer.rawPlayerHeading ) );
 				// check the heading change
@@ -383,9 +426,15 @@ class CMoveTRGPlayerManualMovement extends CMoveTRGScript
 					speedVal = MinF( speedVal, 1.9 );
 				}
 			}
+			else
+			{
+				agent.SetBehaviorVariable( "rawSpeed", 0.0 );
+			}
 			
-			// set speed
+
 			SetSpeedGoal( goal, speedVal );
+			
+			
 			if ( thePlayer.OnDoesSupportRapidTurns( speedVal ) == false )
 			{
 				m_headingChangeVal = 0.0;
