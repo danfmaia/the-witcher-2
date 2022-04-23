@@ -261,7 +261,7 @@ import state Movable in CPlayer extends Base
 				}
 			}
 		}
-		theCamera.SetZoom(parent.cameraFurtherCurrent);
+		//theCamera.SetZoom(parent.cameraFurtherCurrent);
 
 		// send camera pos/rot data to hud (not at every frame)
 		if (theCamera.GetHudDataDelay() <= 0.0)

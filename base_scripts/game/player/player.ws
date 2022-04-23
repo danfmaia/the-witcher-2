@@ -1481,6 +1481,96 @@ import class CPlayer extends CActor
 			return true;
 		}
 	}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// ExperiencedGeralt Camera Timers
+//////////////////////////////////////////////////////////////////////////////////////////
+
+	timer function ExperiencedGeralt_Timer_Camera_Left( timeDelta : float )
+	{
+		if ( theGame.GetGameInputValue('GI_Camera_Left') > 0.5f )
+		{
+			ExperiencedGeralt_Camera_Left();
+			thePlayer.AddTimer('ExperiencedGeralt_Timer_Camera_Left', 0.010, true, false);
+		}
+		else
+			thePlayer.RemoveTimer('ExperiencedGeralt_Timer_Camera_Left');
+	}
+	timer function ExperiencedGeralt_Timer_Camera_Right( timeDelta : float )
+	{
+		if ( theGame.GetGameInputValue('GI_Camera_Right') > 0.5f )
+		{
+			ExperiencedGeralt_Camera_Right();
+			thePlayer.AddTimer('ExperiencedGeralt_Timer_Camera_Right', 0.010, true, false);
+		}
+			else
+				thePlayer.RemoveTimer('ExperiencedGeralt_Timer_Camera_Right');
+	}
+	timer function ExperiencedGeralt_Timer_Camera_Up( timeDelta : float )
+	{
+		if ( theGame.GetGameInputValue('GI_Camera_Up') > 0.5f )
+		{
+			ExperiencedGeralt_Camera_Up();
+			thePlayer.AddTimer('ExperiencedGeralt_Timer_Camera_Up', 0.010, true, false);
+		}
+			else
+				thePlayer.RemoveTimer('ExperiencedGeralt_Timer_Camera_Up');
+	}
+	timer function ExperiencedGeralt_Timer_Camera_Down( timeDelta : float )
+	{
+		if ( theGame.GetGameInputValue('GI_Camera_Down') > 0.5f )
+		{
+			ExperiencedGeralt_Camera_Down();
+			thePlayer.AddTimer('ExperiencedGeralt_Timer_Camera_Down', 0.010, true, false);
+		}
+			else
+				thePlayer.RemoveTimer('ExperiencedGeralt_Timer_Camera_Down');
+	}
+	timer function ExperiencedGeralt_Timer_Camera_In( timeDelta : float )
+	{
+		if ( theGame.GetGameInputValue('GI_Camera_In') > 0.5f )
+		{
+			ExperiencedGeralt_Camera_In();
+			thePlayer.AddTimer('ExperiencedGeralt_Timer_Camera_In', 0.010, true, false);
+		}
+			else
+				thePlayer.RemoveTimer('ExperiencedGeralt_Timer_Camera_In');
+	}
+	timer function ExperiencedGeralt_Timer_Camera_Out( timeDelta : float )
+	{
+		if ( theGame.GetGameInputValue('GI_Camera_Out') > 0.5f )
+		{
+			ExperiencedGeralt_Camera_Out();
+			thePlayer.AddTimer('ExperiencedGeralt_Timer_Camera_Out', 0.010, true, false);
+		}
+			else
+				thePlayer.RemoveTimer('ExperiencedGeralt_Timer_Camera_Out');
+	}
+	timer function ExperiencedGeralt_Timer_Camera_FOV_Decrease( timeDelta : float )
+	{
+		if ( theGame.GetGameInputValue('GI_Camera_FOV_Decrease') > 0.5f )
+		{
+			ExperiencedGeralt_Camera_FOV_Decrease();
+			thePlayer.AddTimer('ExperiencedGeralt_Timer_Camera_FOV_Decrease', 0.010, true, false);
+		}
+			else
+				thePlayer.RemoveTimer('ExperiencedGeralt_Timer_Camera_FOV_Decrease');
+	}
+	timer function ExperiencedGeralt_Timer_Camera_FOV_Increase( timeDelta : float )
+	{
+		if ( theGame.GetGameInputValue('GI_Camera_FOV_Increase') > 0.5f )
+		{
+			ExperiencedGeralt_Camera_FOV_Increase();
+			thePlayer.AddTimer('ExperiencedGeralt_Timer_Camera_FOV_Increase', 0.010, true, false);
+		}
+			else
+				thePlayer.RemoveTimer('ExperiencedGeralt_Timer_Camera_FOV_Increase');
+	}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// ExperiencedGeralt Functions End
+//////////////////////////////////////////////////////////////////////////////////////////
+
 	function SetCombatBlockTriggerActive( val : bool, trigger : CBlockCombatArea )
 	{
 		combatBlockTriggerActive = val;
