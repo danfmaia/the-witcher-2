@@ -493,7 +493,7 @@ class CGuiHud
 		var playerPos	    : Vector		= master.GetWorldPosition();
 		var playerRot	    : EulerAngles	= master.GetWorldRotation();
 		var cameraRot	    : EulerAngles	= theGame.GetActiveCameraComponent().GetWorldRotation();
-		
+	
 		var questEntities   : array< CEntity >;
 		var questEntity     : CEntity;
 		var questPos	    : Vector;
@@ -514,6 +514,10 @@ class CGuiHud
 		x = ( playerPos.X-theHud.miniMapMinX ) * theHud.miniMapScaleX;
 		y = ( playerPos.Y-theHud.miniMapMinY ) * theHud.miniMapScaleY;
 		
+        //reset rotations/fixed minimap
+        //cameraRot.Yaw = 180.0;
+        cameraRot.Yaw = 0.0;
+        
 		// Send rotations
 		theHud.InvokeOneArg( "setNavCameraDirection",	FlashValueFromFloat( cameraRot.Yaw ), AS_hud );
 		theHud.InvokeOneArg( "setNavActorDirection",	FlashValueFromFloat( cameraRot.Yaw-playerRot.Yaw ), AS_hud );
