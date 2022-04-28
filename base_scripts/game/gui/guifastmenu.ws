@@ -281,7 +281,8 @@ class CGuiFastMenu extends CGuiPanel
 					return;
 					
 				lastSelection = FMS_Meditation;
-				if ( thePlayer.CanMeditate() )
+				// if ( thePlayer.CanMeditate() )
+				if ( true )
 				{
 					meditation = true;
 					theHud.SetHudVisibility( "false" );
